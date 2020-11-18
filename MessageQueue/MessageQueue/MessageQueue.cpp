@@ -62,19 +62,25 @@ RetCodes MessageQueue::put(const std::string& iMessage, int iPriority)
 {
   Locker lock(_rmutex);
 
+  // check state
   if (_state == State::STOPPED)
     return RetCodes::STOPPED;
 
+  // check hwm value
   if (_messages.size() >= _hwmValue)
   {
+    // send to listeners
     for (auto& pListener : _listeners)
       pListener->on_hwm();
 
     return _messages.size() == _queueMaxSize ? RetCodes::NO_SPACE : RetCodes::HWM;
   }
 
+  // collect message
   _messages.push( { iMessage, iPriority } );
-  if (!_messages.empty())
+
+  // notify to blocking get
+  if (_messages.size() == 1)
     _cvBlockingGet.notify_one();
   
   return RetCodes::OK;
@@ -84,9 +90,11 @@ RetCodes MessageQueue::get(std::string& oMessage)
 {
   Locker lock(_rmutex);
 
+  // check state
   if (_state == State::STOPPED)
     return RetCodes::STOPPED;
 
+  // block get
   while (_messages.empty())
   {
     _cvBlockingGet.wait(lock);
@@ -95,9 +103,11 @@ RetCodes MessageQueue::get(std::string& oMessage)
       return RetCodes::STOPPED;
   }
 
+  // return message
   oMessage = _messages.top().str();
   _messages.pop();
 
+  // check lwm
   if (_messages.size() <= _lwmValue)
     for (auto& pListener : _listeners)
       pListener->on_lwm();

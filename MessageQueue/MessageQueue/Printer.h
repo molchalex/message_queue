@@ -2,8 +2,7 @@
 #include <string>
 #include <mutex>
 
-
-// Interface class for messages printer
+// Interface class for printer
 class IPrinter
 {
 public:

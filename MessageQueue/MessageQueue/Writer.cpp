@@ -23,6 +23,7 @@ WriterPtr Writer::Create(IMessagePutter* ipMessagePutter, const std::queue<std::
 
 void Writer::run_internal()
 {
+  // thread works while input message is not empty
   while(!_priorityMessages.empty())
   {
     if (_state != State::RUNNING)
@@ -30,11 +31,10 @@ void Writer::run_internal()
 
     auto message = _priorityMessages.front();
 
-    if (_pMessagePutter) {
-      const RetCodes retCode = _pMessagePutter->put(message.first, message.second);
-      if (retCode == RetCodes::OK)
-        _priorityMessages.pop();
-    }
+    // try to put message to queue
+    const RetCodes retCode = _pMessagePutter->put(message.first, message.second);
+    if (retCode == RetCodes::OK)
+      _priorityMessages.pop();
 
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }

@@ -27,14 +27,18 @@ void Reader::handle_message(const std::string& iMessage) const
 
 void Reader::run_internal()
 {
+  // check state
   while (_state == State::RUNNING)
   {
+    // get message
     std::string message;
     const RetCodes retCode = _pMessageGetter->get(message);
+
+    // print message
     if (retCode == RetCodes::OK)
       handle_message(message);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    std::this_thread::sleep_for(std::chrono::milliseconds(15));
   }
 }
 

@@ -24,9 +24,9 @@ class MessageQueue final: public IMessageQueue,
   // constructor by max queue size & high/low water mark values
   MessageQueue(unsigned iQueueMaxSize, unsigned iHwm, unsigned iLwm);
 public:
-  // destructor
   virtual ~MessageQueue();
 
+  // create method with checking input parameters
   static MessageQueuePtr Create(unsigned iQueueMaxSize, unsigned iHwm, unsigned iLwm);
 
   // put message, see IMessagePutter
@@ -45,17 +45,24 @@ public:
   void addListener(IMessageQueueEvents* ipEvents);
 
 private:
+  // inputs
   unsigned _queueMaxSize = 0;
   unsigned _hwmValue = 0;
   unsigned _lwmValue = 0;
 
+  // current state
   State _state;
 
+  // vector of listeners (writers, readers)
   std::vector<IMessageQueueEvents*> _listeners;
 
+  // messages with priority
   std::priority_queue<Message> _messages;
 
+  // recursive mutex
   mutable std::recursive_mutex _rmutex;
+
+  // queue with blocking get, variable to notify to getting threads
   std::condition_variable_any _cvBlockingGet;
 
   using Locker = std::unique_lock<std::recursive_mutex>;

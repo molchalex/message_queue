@@ -1,6 +1,6 @@
 #pragma once
 
-// states
+// States
 enum class State
 {
   STOPPED = 0,

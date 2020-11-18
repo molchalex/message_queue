@@ -109,21 +109,27 @@ int main()
 
   for (int i = 0; i < 10; i++)
   {
-    const int maxSize = 100;//rand() % int(100);
+    const int maxSize = 100;
     const int hwm = rand() % int(100);
     const int lwm = rand() % int(100);
 
+    std::cout << "Message queue init: " << maxSize << " " << hwm << " " << lwm << std::endl;
+
     if (!messageQueue.init(maxSize, hwm, lwm))
     {
-      std::cout << "";
-        continue;
+      std::cout << "Error: invalid input parameters!" << std::endl;
+      continue;
     }
 
+    std::cout << "Message queue start: " << std::endl;
     messageQueue.run();
 
     std::this_thread::sleep_for(std::chrono::seconds(2));
 
+    std::cout << "Message queue stop." << std::endl;
     messageQueue.stop();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
 
   return 0;
