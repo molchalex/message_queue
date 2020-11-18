@@ -38,7 +38,7 @@ void Reader::run_internal()
     if (retCode == RetCodes::OK)
       handle_message(message);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(15));
+    std::this_thread::sleep_for(std::chrono::milliseconds(_delay));
   }
 }
 

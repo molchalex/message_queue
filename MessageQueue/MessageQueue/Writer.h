@@ -35,5 +35,8 @@ private:
   State _state;
 
   std::queue<std::pair<std::string, int>> _priorityMessages;
+
+  // delay for sending next message
+  const unsigned _delay = 10;
 };
 

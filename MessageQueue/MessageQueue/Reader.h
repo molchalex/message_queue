@@ -39,5 +39,8 @@ private:
   IPrinter* _pPrinter;
 
   State _state;
+
+  // delay for reading next message
+  const unsigned _delay = 15;
 };
 
