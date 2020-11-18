@@ -5,8 +5,8 @@
 
 Writer::Writer(IMessagePutter* ipMessagePutter, const std::queue<std::pair<std::string, int>>& iPriorityMessages)
   : _pMessagePutter(ipMessagePutter)
-  , _priorityMessages(iPriorityMessages)
   , _state(State::STOPPED)
+  , _priorityMessages(iPriorityMessages)
 {
   
 }

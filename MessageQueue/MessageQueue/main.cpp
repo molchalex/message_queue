@@ -4,6 +4,7 @@
 #include "Printer.h"
 #include <iostream>
 
+// generate random messages with random priorities
 std::queue<std::pair<std::string, int>> GenerateMessages()
 {
   const int count = rand() % int(100);
@@ -18,6 +19,7 @@ std::queue<std::pair<std::string, int>> GenerateMessages()
   return res;
 }
 
+// generate readers
 std::vector<ReaderPtr> CreateReaders(IMessageGetter* ipMessageGetter, IPrinter* ipHandleMessage)
 {
   std::vector<ReaderPtr> readers;
@@ -31,6 +33,7 @@ std::vector<ReaderPtr> CreateReaders(IMessageGetter* ipMessageGetter, IPrinter* 
   return readers;
 }
 
+// generate writers
 std::vector<WriterPtr> CreateWriters(IMessagePutter* ipMessagePutter)
 {
   std::vector<WriterPtr> writers;
@@ -44,11 +47,9 @@ std::vector<WriterPtr> CreateWriters(IMessagePutter* ipMessagePutter)
   return writers;
 }
 
-class MessageQueueWrapper : IMessageQueue
+class MessageQueueWrapper: public IMessageQueue
 {
 public:
-  MessageQueueWrapper() = default;
-
   bool init(unsigned iQueueMaxSize, unsigned iHwm, unsigned iLwm)
   {
     clear();
