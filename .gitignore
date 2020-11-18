@@ -9,6 +9,8 @@ temp
 *.obj
 *.ilk
 *.pdb
+*.iobj
+*.ipdb
 
 # Precompiled Headers
 *.gch
@@ -30,6 +32,5 @@ temp
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
