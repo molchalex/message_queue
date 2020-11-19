@@ -24,11 +24,8 @@ WriterPtr Writer::Create(IMessagePutter* ipMessagePutter, const std::queue<std::
 void Writer::run_internal()
 {
   // thread works while input message is not empty
-  while(!_priorityMessages.empty())
+  while(!_priorityMessages.empty() && _state == State::RUNNING)
   {
-    if (_state != State::RUNNING)
-      continue;
-
     auto message = _priorityMessages.front();
 
     // try to put message to queue
